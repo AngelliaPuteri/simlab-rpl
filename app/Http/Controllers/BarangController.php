@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BarangController extends Controller
 {
@@ -25,13 +26,13 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kategori_id' => 'required|exists:kategoris,id',
-            'kode_barang' => 'required|string|max:20|unique:barangs,kode_barang',
-            'nama_barang' => 'required|string|max:150',
-            'spesifikasi' => 'nullable|string',
-            'stok' => 'required|integer|min:0',
-            'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
-            'status' => 'required|in:Tersedia,Dipinjam,Maintenance',
+        'kategori_id' => 'required|exists:kategoris,id',
+        'kode_barang' => 'required|string|max:20|unique:barangs,kode_barang',
+        'nama_barang' => 'required|string|min:3|max:150',
+        'spesifikasi' => 'nullable|string',
+        'stok' => 'required|integer|min:0',
+        'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
+        'status' => 'required|in:Tersedia,Dipinjam,Maintenance',
         ]);
 
         Barang::create($validated);
@@ -52,8 +53,13 @@ class BarangController extends Controller
     {
         $validated = $request->validate([
             'kategori_id' => 'required|exists:kategoris,id',
-            'kode_barang' => 'required|string|max:20|unique:barangs,kode_barang,' . $barang->id,
-            'nama_barang' => 'required|string|max:150',
+            'kode_barang' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('barangs', 'kode_barang')->ignore($barang->id),
+            ],
+            'nama_barang' => 'required|string|min:3|max:150',
             'spesifikasi' => 'nullable|string',
             'stok' => 'required|integer|min:0',
             'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
