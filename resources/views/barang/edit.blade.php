@@ -90,6 +90,10 @@
                     <textarea name="spesifikasi"
                               rows="4"
                               class="w-full border border-gray-300 rounded-lg px-4 py-2.5">{{ old('spesifikasi', $barang->spesifikasi) }}</textarea>
+
+                    @error('spesifikasi')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="mb-4">
@@ -129,6 +133,10 @@
                         </option>
 
                     </select>
+
+                    @error('kondisi')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="mb-6">
@@ -152,6 +160,9 @@
                         </option>
 
                     </select>
+                    @error('status')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="flex gap-3">

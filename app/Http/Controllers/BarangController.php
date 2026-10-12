@@ -9,6 +9,15 @@ use Illuminate\Validation\Rule;
 
 class BarangController extends Controller
 {
+    public function dashboard()
+    {
+        $total = Barang::count();
+        $tersedia = Barang::where('status', 'Tersedia')->count();
+        $dipinjamMaintenance = Barang::whereIn('status', ['Dipinjam', 'Maintenance'])->count();
+
+        return view('dashboard', compact('total', 'tersedia', 'dipinjamMaintenance'));
+    }
+
     public function index()
     {
         $barangs = Barang::with('kategori')->get();
@@ -26,13 +35,13 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-        'kategori_id' => 'required|exists:kategoris,id',
-        'kode_barang' => 'required|string|max:20|unique:barangs,kode_barang',
-        'nama_barang' => 'required|string|min:3|max:150',
-        'spesifikasi' => 'nullable|string',
-        'stok' => 'required|integer|min:0',
-        'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
-        'status' => 'required|in:Tersedia,Dipinjam,Maintenance',
+            'kategori_id' => 'required|exists:kategoris,id',
+            'kode_barang' => 'required|string|max:20|unique:barangs,kode_barang',
+            'nama_barang' => 'required|string|min:3|max:150',
+            'spesifikasi' => 'nullable|string',
+            'stok' => 'required|integer|min:0',
+            'kondisi' => 'required|in:Baik,Rusak Ringan,Rusak Berat',
+            'status' => 'required|in:Tersedia,Dipinjam,Maintenance',
         ]);
 
         Barang::create($validated);

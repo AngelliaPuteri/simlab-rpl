@@ -12,6 +12,7 @@
 <body class="bg-gray-100 min-h-screen">
 
     <div class="max-w-7xl mx-auto px-4 py-8">
+    </a>
 
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
@@ -35,6 +36,41 @@
                 {{ session('success') }}
             </div>
         @endif
+
+        <a href="{{ route('dashboard') }}" class="text-blue-600 hover:underline text-sm">← Dashboard</a>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+
+            <div class="bg-white rounded-xl shadow p-5">
+                <p class="text-sm text-gray-500">
+                    Total Aset
+                </p>
+
+                <p class="text-3xl font-bold text-gray-800 mt-2">
+                    {{ $barangs->count() }}
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow p-5">
+                <p class="text-sm text-gray-500">
+                    Unit Tersedia
+                </p>
+
+                <p class="text-3xl font-bold text-emerald-600 mt-2">
+                    {{ $barangs->where('status', 'Tersedia')->count() }}
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow p-5">
+                <p class="text-sm text-gray-500">
+                    Unit Dipinjam / Maintenance
+                </p>
+
+                <p class="text-3xl font-bold text-rose-600 mt-2">
+                    {{ $barangs->whereIn('status', ['Dipinjam', 'Maintenance'])->count() }}
+                </p>
+            </div>
+
+        </div>
 
         <div class="bg-white rounded-xl shadow overflow-hidden">
 
@@ -86,19 +122,23 @@
                                 </td>
 
                                 <td class="px-4 py-3">
+
                                     @if($barang->status === 'Tersedia')
-                                        <span class="bg-green-100 text-green-700 px-2.5 py-1 rounded-full text-xs font-medium">
+                                        <span class="inline-flex items-center bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-xs font-medium">
                                             Tersedia
                                         </span>
+
                                     @elseif($barang->status === 'Dipinjam')
-                                        <span class="bg-yellow-100 text-yellow-700 px-2.5 py-1 rounded-full text-xs font-medium">
+                                        <span class="inline-flex items-center bg-rose-100 text-rose-800 px-2.5 py-1 rounded-full text-xs font-medium">
                                             Dipinjam
                                         </span>
+
                                     @else
-                                        <span class="bg-red-100 text-red-700 px-2.5 py-1 rounded-full text-xs font-medium">
+                                        <span class="inline-flex items-center bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium">
                                             Maintenance
                                         </span>
                                     @endif
+
                                 </td>
 
                                 <td class="px-4 py-3">
